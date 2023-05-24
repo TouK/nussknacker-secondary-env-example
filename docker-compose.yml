@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nussknacker1:
+    image: touk/nussknacker:latest
+    environment:
+      - DEFAULT_SCENARIO_TYPE=request-response-embedded
+      - ENVIRONMENT_NAME=env1
+      - SECONADRY_ENVIRONMENT_URI=http://nussknacker2:8080/api
+      - TARGET_ENVIRONMENT_ID=env2
+    ports:
+      - "8080:8080"
+      - "8181:8181"
+    volumes:
+      - "./application.conf:/opt/nussknacker/conf/application.conf"
+
+  nussknacker2:
+    image: touk/nussknacker:latest
+    environment:
+      - DEFAULT_SCENARIO_TYPE=request-response-embedded
+      - ENVIRONMENT_NAME=env2
+      - SECONADRY_ENVIRONMENT_URI=http://nussknacker1:8080/api
+      - TARGET_ENVIRONMENT_ID=env1
+    ports:
+      - "8081:8080"
+      - "8182:8181"
+    volumes:
+      - "./application.conf:/opt/nussknacker/conf/application.conf"
